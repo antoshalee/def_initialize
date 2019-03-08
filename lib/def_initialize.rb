@@ -23,32 +23,29 @@ module DefInitialize
     end
   end
 
-  class << self
-    # API method
-    def with(args_str) # rubocop:disable Style/MethodLength
-      mixin = Module.new do
-        class << self
-          def extended(base)
-            args = Parser.parse(@args_str)
+  class Mixin < Module
+    def initialize(args_str)
+      args = Parser.parse(args_str)
 
-            base.send(:attr_reader, *args)
+      readers = args.map { |a| ":#{a}"}.join(", ")
 
-            body = args.reduce(''.dup) do |acc, arg|
-              acc << "@#{arg} = #{arg}\n"
-            end
-
-            base.class_eval <<-CODE, __FILE__, __LINE__ + 1
-              def initialize(#{@args_str})
-                #{body}
-              end
-            CODE
-          end
-        end
+      body = args.reduce(''.dup) do |acc, arg|
+        acc << "@#{arg} = #{arg}\n"
       end
 
-      mixin.instance_variable_set(:@args_str, args_str)
+      module_eval <<-CODE, __FILE__, __LINE__ + 1
+        def initialize(#{args_str})
+          #{body}
+        end
 
-      mixin
+        attr_reader #{readers}
+      CODE
+    end
+  end
+
+  class << self
+    def with(args_str)
+      Mixin.new(args_str)
     end
   end
 end

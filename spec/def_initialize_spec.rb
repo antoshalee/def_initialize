@@ -7,7 +7,7 @@ RSpec.describe DefInitialize do
 
   let(:klass) do
     Class.new do
-      extend DefInitialize.with("name, lastname = SecureRandom.uuid, age:, position: 'manager'")
+      include DefInitialize.with("name, lastname = SecureRandom.uuid, age:, position: 'manager'")
     end
   end
 
@@ -18,5 +18,24 @@ RSpec.describe DefInitialize do
     expect(person.lastname.length).to eq 36 # UUID length
     expect(person.age).to eq 35
     expect(person.position).to eq 'manager'
+  end
+
+  context 'with overriding' do
+    let(:klass) do
+      Class.new do
+        include DefInitialize.with("name, lastname = SecureRandom.uuid, age:, position: 'manager'")
+
+        def initialize(*args)
+          super
+
+          @age = 50
+        end
+      end
+    end
+
+    it 'adds method to ancestors chain and can be called by #super' do
+      expect(person.name).to eq 'Olga'
+      expect(person.age).to eq 50
+    end
   end
 end

@@ -23,7 +23,7 @@ Or install it yourself as:
 
 ```ruby
 class Employee
-  extend DefInitialize.with("name, uuid = SecureRandom.uuid, age, position: 'manager'")
+  include DefInitialize.with("name, uuid = SecureRandom.uuid, age, position: 'manager'")
 end
 
 # is the same as:
