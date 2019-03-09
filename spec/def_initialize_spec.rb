@@ -38,4 +38,45 @@ RSpec.describe DefInitialize do
       expect(person.age).to eq 50
     end
   end
+
+  it 'raises an error on invalid syntax' do
+    expect do
+      Class.new do
+        include DefInitialize.with("name,,lastname")
+      end
+    end.to raise_error(SyntaxError)
+  end
+
+  context 'with anonimous *rest_params' do
+    let(:klass) do
+      Class.new do
+        include DefInitialize.with("name, *")
+      end
+    end
+
+    it 'allows a variable number of arguments' do
+      person = klass.new('Olga')
+      expect(person.name).to eq 'Olga'
+      person = klass.new('Olga', 1)
+      expect(person.name).to eq 'Olga'
+      person = klass.new('Olga', 1, '2')
+      expect(person.name).to eq 'Olga'
+    end
+  end
+
+  context 'with anonimous **kwrest_params' do
+    let(:klass) do
+      Class.new do
+        include DefInitialize.with("name:, **")
+      end
+    end
+
+    it 'allows arbitrary hashes that include required fields' do
+      person = klass.new(name: 'Olga')
+      expect(person.name).to eq 'Olga'
+      person = klass.new(name: 'Olga', lastname: 'Egorova')
+      expect(person.name).to eq 'Olga'
+      expect { klass.new(lastname: 'Olga') }.to raise_error(ArgumentError)
+    end
+  end
 end
