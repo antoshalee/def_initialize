@@ -1,6 +1,7 @@
 module DefInitialize
   require 'def_initialize/version'
   require 'def_initialize/parser'
+  require 'def_initialize/dsl'
 
   class Mixin < Module
     def initialize(args_str)

@@ -25,7 +25,7 @@ Or install it yourself as:
 
 ```ruby
 class Employee
-  include DefInitialize.with("name, uuid = SecureRandom.uuid, age, position: 'manager'")
+  include DefInitialize.with("name, uuid = SecureRandom.uuid, age:, position: 'manager'")
 end
 
 # is the same as:
@@ -39,6 +39,20 @@ class Employee
     @age = age
     @position = position
   end
+end
+```
+
+Alternatively, you can extend a class with `DefInitialize::DSL` and use `def_initialize` method. Note, how close it looks to the native declaration!
+
+```ruby
+class A
+  extend DefInitialize::DSL
+
+  def_initialize("name, lastname")
+end
+
+class B < A
+  def_initialize("shape, color")
 end
 ```
 
