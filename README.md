@@ -42,17 +42,21 @@ class Employee
 end
 ```
 
+### DSL
+
 Alternatively, you can extend a class with `DefInitialize::DSL` and use `def_initialize` method. Note, how close it looks to the native declaration!
 
 ```ruby
-class A
+class Base
   extend DefInitialize::DSL
-
-  def_initialize("name, lastname")
 end
 
-class B < A
-  def_initialize("shape, color")
+class Circle < Base
+  def_initialize("radius")
+end
+
+class Rectangle < Base
+  def_initialize("length, width")
 end
 ```
 
