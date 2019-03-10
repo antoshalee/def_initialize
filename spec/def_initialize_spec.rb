@@ -79,4 +79,20 @@ RSpec.describe DefInitialize do
       expect { klass.new(lastname: 'Olga') }.to raise_error(ArgumentError)
     end
   end
+
+  context 'with underscored variable names' do
+    let(:klass) do
+      Class.new do
+        include DefInitialize.with("x, _, y, _foo, _bar")
+      end
+    end
+
+    it 'does not assign them' do
+      obj = klass.new(1, 2, 3, 4, 5)
+      expect(obj.x).to eq 1
+      expect(obj.y).to eq 3
+      expect(obj).not_to respond_to(:_foo)
+      expect(obj).not_to respond_to(:_bar)
+    end
+  end
 end
