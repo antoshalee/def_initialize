@@ -42,6 +42,25 @@ class Employee
 end
 ```
 
+By convention, parameters starting with underscore symbol `'_'` are ignored:
+
+```ruby
+class Point
+  include DefInitialize.with("x, y, _c")
+end
+
+# transforms to:
+
+class Point
+  attr_reader :x, :y
+
+  def initialize(x, y, _c) # Note that `_c` is still required to pass
+    @x = x
+    @y = y
+  end
+end
+```
+
 ### DSL
 
 Alternatively, you can extend a class with `DefInitialize::DSL` and use `def_initialize` method. Note, how close it looks to the native declaration!
@@ -62,7 +81,7 @@ end
 
 ### What should I do in more complex cases?
 
-Just write old plain `def initialize`
+Just write plain old `def initialize`.
 
 
 ## Development
