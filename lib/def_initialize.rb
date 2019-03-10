@@ -12,19 +12,22 @@ module DefInitialize
       CODE
 
       parameters = instance_method(:initialize).parameters
-      names = parameters
-              .map { |p| p[1] }
-              .select { |n| n && !n.to_s.start_with?('_') }
 
-      readers = names.map { |a| ":#{a}" }.join(', ')
-      body = names.map { |a| "@#{a} = #{a}" }.join("\n")
+      readers, rows = [], []
+
+      parameters
+        .each do |(_type, name)|
+          next if !name || name.to_s.start_with?('_')
+          readers << ":#{name}"
+          rows << "@#{name} = #{name}"
+        end
 
       module_eval <<-CODE, __FILE__, __LINE__ + 1
         def initialize(#{args_str})
-          #{body}
+          #{rows.join("\n")}
         end
 
-        attr_reader #{readers}
+        attr_reader #{readers.join(', ')}
       CODE
     end
   end
