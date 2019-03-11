@@ -6,10 +6,10 @@ require 'def_initialize/version'
 Gem::Specification.new do |spec|
   spec.name          = 'def_initialize'
   spec.version       = DefInitialize::VERSION
-  spec.authors       = ['Anton Lee']
-  spec.email         = ['antoshalee@gmail.com']
+  spec.authors       = ['Anton Lee', 'Vladimir Kochnev']
+  spec.email         = ['antoshalee@gmail.com', 'hashtable@yandex.ru']
 
-  spec.summary       = 'Define your initializer along with attribute readers in one line'
+  spec.summary       = 'Define an initializer along with attribute accessors in one line'
   spec.homepage      = 'https://github.com/antoshalee/def_initialize'
   spec.license       = 'MIT'
 
