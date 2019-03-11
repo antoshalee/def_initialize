@@ -42,7 +42,7 @@ class Employee
 
   private
 
-  attr_reader :name, :uuid, :age, :position
+  attr_reader :name, :uuid, :params, :age, :position, :opts
 end
 ```
 
