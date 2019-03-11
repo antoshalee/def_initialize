@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/antoshalee/def_initialize.svg?branch=master)](https://travis-ci.org/antoshalee/def_initialize)
 
-# DefInitialize (WIP)
+# DefInitialize
 
 Another approach to reduce initialization boilerplate
 
@@ -98,7 +98,7 @@ class Person
   def initialize(name)
     @name = name
   end
-  
+
   attr_reader :name
 
   private
