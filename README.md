@@ -25,17 +25,19 @@ Or install it yourself as:
 
 ```ruby
 class Employee
-  include DefInitialize.with("name, uuid = SecureRandom.uuid, age:, position: 'manager'")
+  include DefInitialize.with("name, uuid = SecureRandom.uuid, *params, age:, position: 'manager', **opts")
 end
 
 # is the same as:
 
 class Employee
-  def initialize(name, uuid = SecureRandom.uuid, age:, position: 'manager')
+  def initialize(name, uuid = SecureRandom.uuid, *params, age:, position: 'manager', **opts)
     @name = name
     @uuid = uuid
+    @params = params
     @age = age
     @position = position
+    @opts = opts
   end
 
   private
