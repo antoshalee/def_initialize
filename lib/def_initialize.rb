@@ -3,9 +3,12 @@
 module DefInitialize
   require 'def_initialize/version'
   require 'def_initialize/dsl'
+  require 'def_initialize/accessors_builder'
 
   class Mixin < Module
-    def initialize(args_str)
+    def initialize(args_str, readers: :private, writers: nil)
+      accessors_options = { readers_mode: readers, writers_mode: writers }
+
       # Create empty method just to inspect its parameters.
       module_eval <<-CODE, __FILE__, __LINE__ + 1
         def initialize(#{args_str}); end
@@ -13,12 +16,12 @@ module DefInitialize
 
       parameters = instance_method(:initialize).parameters
 
-      readers, rows = [], []
+      accessors, rows = [], []
 
       parameters
         .each do |(_type, name)|
           next if !name || name.to_s.start_with?('_')
-          readers << ":#{name}"
+          accessors << ":#{name}"
           rows << "@#{name} = #{name}"
         end
 
@@ -27,14 +30,14 @@ module DefInitialize
           #{rows.join("\n")}
         end
 
-        attr_reader #{readers.join(', ')}
+        #{AccessorsBuilder.build(accessors, accessors_options)}
       CODE
     end
   end
 
   class << self
-    def with(args_str)
-      Mixin.new(args_str)
+    def with(args_str, **opts)
+      Mixin.new(args_str, **opts)
     end
   end
 end

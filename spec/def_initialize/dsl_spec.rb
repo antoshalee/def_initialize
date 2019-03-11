@@ -3,7 +3,7 @@ RSpec.describe DefInitialize::DSL do
     klass = Class.new do
       extend DefInitialize::DSL
 
-      def_initialize("name, lastname, age:, position: 'speaker'")
+      def_initialize("name, lastname, age:, position: 'speaker'", readers: :public)
     end
 
     person = klass.new("Jiddu", "Krishnamurti", age: 75)
@@ -18,7 +18,7 @@ RSpec.describe DefInitialize::DSL do
     end
 
     klass = Class.new(base) do
-      def_initialize("name, lastname, age:, position: 'speaker'")
+      def_initialize("name, lastname, age:, position: 'speaker'", readers: :public)
     end
 
     person = klass.new("Jiddu", "Krishnamurti", age: 75)

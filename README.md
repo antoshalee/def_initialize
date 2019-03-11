@@ -31,14 +31,16 @@ end
 # is the same as:
 
 class Employee
-  attr_reader :name, :uuid, :age, :position
-
   def initialize(name, uuid = SecureRandom.uuid, age:, position: 'manager')
     @name = name
     @uuid = uuid
     @age = age
     @position = position
   end
+
+  private
+
+  attr_reader :name, :uuid, :age, :position
 end
 ```
 
@@ -52,12 +54,14 @@ end
 # transforms to:
 
 class Point
-  attr_reader :x, :y
-
   def initialize(x, y, _c) # Note that `_c` is still required to pass
     @x = x
     @y = y
   end
+
+  private
+
+  attr_reader :x, :y
 end
 ```
 
@@ -78,6 +82,35 @@ class Rectangle < Base
   def_initialize("length, width")
 end
 ```
+
+### Access control
+
+You can specify level of access for your readers and writers:
+
+```ruby
+class Person < Base
+  def_initialize("name", readers: :public, writers: :private)
+end
+
+# transforms to:
+
+class Person
+  def initialize(name)
+    @name = name
+  end
+  
+  attr_reader :name
+
+  private
+
+  attr_writer :name
+end
+
+```
+Allowed values are `:public`, `:private`, `:protected` and `nil`. If value is `nil`, accessors won't be defined at all.
+
+default value for `readers` is `private`, default value for `writers` is `nil`
+
 
 ### What should I do in more complex cases?
 
