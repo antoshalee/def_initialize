@@ -3,33 +3,22 @@
 module DefInitialize
   module AccessorsBuilder
     class << self
-      def build(accessors, readers_mode:, writers_mode:)
-        check_option!(readers_mode)
-        check_option!(writers_mode)
-
-        result = ''.dup
-
-        if readers_mode
-          result << "#{readers_mode}\n"
-          result << "attr_reader #{accessors.join(', ')}\n"
-        end
-
-        if writers_mode
-          result << "#{writers_mode}\n"
-          result << "attr_writer #{accessors.join(', ')}\n"
-        end
-
-        result
+      def build(accessors, readers_access_level:, writers_access_level:)
+        part('attr_reader', readers_access_level, accessors) +
+          part('attr_writer', writers_access_level, accessors)
       end
 
       private
 
-      def check_option!(value)
-        return unless value
-        return if %w[private public protected].include?(value.to_s)
+      def part(attr_method, access_level, accessors)
+        return '' unless access_level
 
-        raise ArgumentError,
-              "Uknown value #{value}. Must be :private, :public, :protected or nil"
+        unless %w[private public protected].include?(access_level.to_s)
+          raise ArgumentError,
+                "Uknown access level #{access_level}. Must be :private, :public, :protected or nil"
+        end
+
+        "#{access_level}\n#{attr_method} #{accessors.join(', ')}\n"
       end
     end
   end

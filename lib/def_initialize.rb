@@ -7,7 +7,7 @@ module DefInitialize
 
   class Mixin < Module
     def initialize(args_str, readers: :private, writers: nil)
-      accessors_options = { readers_mode: readers, writers_mode: writers }
+      accessors_options = { readers_access_level: readers, writers_access_level: writers }
 
       # Create empty method just to inspect its parameters.
       module_eval <<-CODE, __FILE__, __LINE__ + 1
