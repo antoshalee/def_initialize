@@ -10,7 +10,7 @@ RSpec.describe DefInitialize do
     opts = options
 
     Class.new do
-      include DefInitialize.with(str, opts)
+      include DefInitialize.with(str, **opts)
     end
   end
 
@@ -82,7 +82,7 @@ RSpec.describe DefInitialize do
       Class.new do
         include DefInitialize.with("name, uuid = SecureRandom.uuid, age:, position: 'manager'")
 
-        def initialize(*args)
+        def initialize(name, **)
           super
 
           @age = 50
