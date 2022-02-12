@@ -1,5 +1,5 @@
 RSpec.describe DefInitialize::AccessorsBuilder do
-  subject { described_class.build(accessors, options) }
+  subject { described_class.build(accessors, **options) }
 
   let(:accessors) { [':x', ':y', ':z'] }
 
